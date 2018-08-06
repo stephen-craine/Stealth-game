@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class CharacterController : MonoBehaviour
 {
     public float moveSpeed = 12;
-    public float turnSpeed = 90;
+    public Camera playerCamera;
+    public NavMeshAgent playerAI;
 
 
     void Start()
@@ -13,12 +15,19 @@ public class CharacterController : MonoBehaviour
     }
 
 
+
     void Update()
     {
-        var turnPlayer = Input.GetAxis("Horizontal") * Time.deltaTime * turnSpeed;
-        var moveVertical = Input.GetAxis("Vertical") * Time.deltaTime * moveSpeed;
-        transform.Translate(0, 0, moveVertical);
-        transform.Rotate(0, turnPlayer, 0);
+        if (Input.GetMouseButtonDown(0))
+        {
+            Ray playerRay = playerCamera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(playerRay, out hit)) //Check clicked point is a possible position
+            {
+                //Moving player
+                playerAI.SetDestination(hit.point);
+            }
+        }
 
 
     }
