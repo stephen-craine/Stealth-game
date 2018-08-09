@@ -28,14 +28,14 @@ public class ConnectedWaypoint : Waypoint { //subclass of waypoint to find nearb
         }
 
     }
-    public override void OnDrawGizmos()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, debugDrawRadius);
+    //public override void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.yellow;
+    //    Gizmos.DrawWireSphere(transform.position, debugDrawRadius);
 
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, _connectivityRadius);
-    }
+    //    Gizmos.color = Color.green;
+    //    Gizmos.DrawWireSphere(transform.position, _connectivityRadius);
+    //}
 
     public ConnectedWaypoint NextWaypoint(ConnectedWaypoint previousWaypoint)
     {
