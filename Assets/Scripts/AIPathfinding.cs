@@ -10,31 +10,101 @@ public class AIPathfinding : MonoBehaviour {
     ConnectedWaypoint _currentWaypoint;
 
     ConnectedWaypoint _previousWaypoint;
-    NavMeshAgent navMeshAgent;
+    NavMeshAgent agent;
+    public float patrolSpeed = 7f;
+    public float chaseSpeed = 9f;
+    public GameObject target;
+    Transform player;
 
-    [SerializeField]
-    int waypointsVisited;
 
-    [SerializeField]
-    bool travelling;
+    //enemy sight
+    public Light spotlight;
+    public float viewDistance;
+    float viewAngle;
+    public LayerMask viewMask;
+    Color spotLightOriginalColor;
 
-    [SerializeField]
-    bool _waiting;
+    //FSM initial setup
+    public enum State
+    {
+        PATROL,
+        CHASE
+    }
+    public State state;
+    private bool alive;
 
-    float waitTimer;
 
-    [SerializeField]
-    float waitTime = 1f;
+    //pathfinding initial setup
+    [SerializeField] int waypointsVisited;
 
-    //[SerializeField]
-    //float changeDirection = 0.1f; //probability of returning to previous waypoint
+    [SerializeField] bool travelling;
 
-	void Start () {
+    [SerializeField] bool _waiting;
+
+    //float waitTimer;
+
+    //[SerializeField] float waitTime = 1f;
+
+
+
+
+
+
+
+    void Start() {
+        player = GameObject.FindGameObjectWithTag("Player").transform; // player transform
+        spotLightOriginalColor = spotlight.color;
+        viewAngle = spotlight.spotAngle;
         _waiting = false;
         waypointsVisited = 0;
-        navMeshAgent = this.GetComponent<NavMeshAgent>();
+        agent = this.GetComponent<NavMeshAgent>();
 
-        if(navMeshAgent == null)
+
+
+        //FSM
+        state = AIPathfinding.State.PATROL;
+
+        alive = true;
+
+        StartCoroutine("FSM");
+    }
+    IEnumerator FSM()
+    {
+        while (alive)
+        {
+            switch (state)
+            {
+                case State.PATROL:
+                    Patrol();
+                    break;
+                case State.CHASE:
+                    Chase();
+                    break;
+            }
+            yield return null;
+        }
+    }
+
+    void Chase()
+    {
+        agent.speed = chaseSpeed;
+        agent.SetDestination(target.transform.position);
+
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        //NEED TO GIVE GAME OVER OR LOSE HEALTH
+        //if (other.tag == "Player")
+        //{
+        //    state = AIPathfinding.State.CHASE;
+        //    target = other.gameObject;
+        //}
+    }
+
+    void Patrol() {
+        agent.speed = patrolSpeed;
+        if (agent == null)
         {
             Debug.LogError("Nav mesh agent component not attached to: " + gameObject.name);
         }
@@ -44,7 +114,7 @@ public class AIPathfinding : MonoBehaviour {
             {
                 GameObject[] allWaypoints = GameObject.FindGameObjectsWithTag("Waypoint");
 
-                while(_currentWaypoint == null)
+                while (_currentWaypoint == null)
                 {
                     int random = UnityEngine.Random.Range(0, allWaypoints.Length);
                     ConnectedWaypoint initialWaypoint = allWaypoints[random].GetComponent<ConnectedWaypoint>();
@@ -52,11 +122,14 @@ public class AIPathfinding : MonoBehaviour {
                     //could add debug here in case of not finding a waypoint.
                 }
             }
-            SetDestination();  
-        
+            if (!travelling)
+            {
+                SetDestination();
+            }
+
         }
 
-	}
+    }
 
     private void SetDestination()
     {
@@ -70,37 +143,69 @@ public class AIPathfinding : MonoBehaviour {
             _previousWaypoint = _currentWaypoint;
             _currentWaypoint = nextWaypoint;
         }
-        
-            Vector3 targetVector = _currentWaypoint.transform.position;
-            navMeshAgent.SetDestination(targetVector);
-            travelling = true;
-        
+
+        Vector3 targetVector = _currentWaypoint.transform.position;
+        agent.SetDestination(targetVector);
+        travelling = true;
+
     }
 
     public void Update()
     {
-        if (travelling && navMeshAgent.remainingDistance <= 1.0f)
+        if (travelling && agent.remainingDistance <= 1.0f)
         {
             travelling = false;
             waypointsVisited++;
-            if (!_waiting) //if not already waiting, start waiting
-            {
-                waitTimer = 0f;
-                _waiting = true;
-            }
+            //if (!_waiting) //if not already waiting, start waiting
+            //{
+            //    waitTimer = 0f;
+            //    _waiting = true;
+            //}
         }
 
-        if (_waiting) //if waiting keep waiting until time is up
+        if (SpotPlayer())
         {
-            waitTimer += Time.deltaTime;
-            if (waitTimer >= waitTime)
-            {
-                _waiting = false;
-                SetDestination();
-            }
+            spotlight.color = Color.red;
+        } else
+        {
+            spotlight.color = spotLightOriginalColor;
         }
 
-        } 
+        //if (_waiting) //if waiting keep waiting until time is up
+        //{
+        //    waitTimer += Time.deltaTime;
+        //    if (waitTimer >= waitTime)
+        //    {
+        //        _waiting = false;
+        //        SetDestination();
     }
 
 
+    //    } 
+    //}
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawRay(transform.position, transform.forward * viewDistance);
+    }
+
+    bool SpotPlayer()
+    {
+        if (Vector3.Distance(transform.position, player.position) < viewDistance)
+        {
+            Vector3 dirToPlayer = (player.position - transform.position).normalized;
+            float angleBetweenGuardPlayer = Vector3.Angle(transform.forward, dirToPlayer);
+            if (angleBetweenGuardPlayer < viewAngle / 2f)
+            {
+                if(!Physics.Linecast(transform.position, player.position, viewMask))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
+        }

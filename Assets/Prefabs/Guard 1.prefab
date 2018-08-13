@@ -141,17 +141,17 @@ Light:
   m_Enabled: 1
   serializedVersion: 8
   m_Type: 0
-  m_Color: {r: 0.6698113, g: 0, b: 0.14851326, a: 1}
+  m_Color: {r: 0.68235296, g: 0.68235296, b: 0.68235296, a: 1}
   m_Intensity: 40
   m_Range: 6
   m_SpotAngle: 97.1
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 2
+    m_Type: 1
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
-    m_Bias: 0.05
+    m_Bias: 0
     m_NormalBias: 0.4
     m_NearPlane: 0.2
   m_Cookie: {fileID: 0}
@@ -180,10 +180,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _currentWaypoint: {fileID: 0}
+  patrolSpeed: 7
+  chaseSpeed: 9
+  target: {fileID: 0}
+  spotlight: {fileID: 108572199386479006}
+  viewDistance: 3.5
+  viewMask:
+    serializedVersion: 2
+    m_Bits: 2048
+  state: 0
   waypointsVisited: 0
   travelling: 0
   _waiting: 0
-  waitTime: 1
 --- !u!136 &136758779950519404
 CapsuleCollider:
   m_ObjectHideFlags: 1
@@ -191,7 +199,7 @@ CapsuleCollider:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1919336230736114}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.5
   m_Height: 2
@@ -205,7 +213,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 1919336230736114}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 1.5
+  m_Radius: 0.5
   m_Speed: 8
   m_Acceleration: 20
   avoidancePriority: 50
