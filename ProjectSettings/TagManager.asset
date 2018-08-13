@@ -6,7 +6,7 @@ TagManager:
   tags:
   - Key
   - Waypoint
-  - Spawnpoint
+  - Trigger
   layers:
   - Default
   - TransparentFX

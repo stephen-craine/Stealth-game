@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
 public class AIPathfinding : MonoBehaviour {
 
@@ -14,7 +15,8 @@ public class AIPathfinding : MonoBehaviour {
     public float patrolSpeed = 7f;
     public float chaseSpeed = 9f;
     Transform player;
-    CreateCollectible hasCollectedA;
+   [SerializeField] Dictionary<GameObject, bool> triggerDict = new Dictionary<GameObject, bool>(); //dict of triggers which will be deleted from here when checked
+    //CreateCollectible hasCollectedA;
 
 
     //enemy sight
@@ -59,16 +61,24 @@ public class AIPathfinding : MonoBehaviour {
         viewAngle = spotlight.spotAngle;
         //_waiting = false;
         waypointsVisited = 0;
-        agent = this.GetComponent<NavMeshAgent>();
-        checkedA = false;
 
-        if((hasCollectedA == null) && (GameObject.FindGameObjectWithTag("Spawnpoint").GetComponent<CreateCollectible>() != null)){
-            hasCollectedA = GameObject.FindGameObjectWithTag("Spawnpoint").GetComponent<CreateCollectible>();
-
-        } else
+       
+        GameObject[] triggerList = GameObject.FindGameObjectsWithTag("Trigger");
+        foreach(GameObject i in triggerList)
         {
-            Debug.LogError("Missing CreateCollectible script component");
+            triggerDict.Add(i, false);  //populating dictionary with all triggers from game
         }
+
+        agent = this.GetComponent<NavMeshAgent>();
+        
+
+        //if((hasCollectedA == null) && (GameObject.FindGameObjectWithTag("Trigger").GetComponent<CreateCollectible>() != null)){
+        //    hasCollectedA = GameObject.FindGameObjectWithTag("Trigger").GetComponent<CreateCollectible>();
+
+        //} else
+        //{
+        //    Debug.LogError("Missing CreateCollectible script component");
+        //}
         
 
 
@@ -114,11 +124,11 @@ public class AIPathfinding : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other)
     {
-        //NEED TO GIVE GAME OVER OR LOSE HEALTH
-        //if (other.tag == "Player")
-        //{
-        //   
-        //}
+       // NEED TO GIVE GAME OVER OR LOSE HEALTH
+        if (other.tag == "Player")
+        {
+            SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+        }
     }
 
     void Patrol() {
@@ -192,12 +202,18 @@ public class AIPathfinding : MonoBehaviour {
         {
             spotlight.color = spotLightOriginalColor;
         }
-
-        if ((hasCollectedA != null) && hasCollectedA.collectedA == true && checkedA == false)
+        if (triggerDict != null)
         {
-            placeToCheck = GameObject.FindGameObjectWithTag("Spawnpoint").GetComponent<CreateCollectible>().Spawnpoint;
-            checkedA = true;
-            state = AIPathfinding.State.INVESTIGATE;
+            foreach (KeyValuePair<GameObject, bool> pair in triggerDict)
+            {
+
+                if (pair.Key.GetComponent<CreateCollectible>().collected == true && pair.Value == false)
+                {
+                    placeToCheck = pair.Key.GetComponent<CreateCollectible>().Spawnpoint;
+                    triggerDict[pair.Key] = true;
+                    state = AIPathfinding.State.INVESTIGATE;
+                }
+            }
         }
 
 
@@ -213,6 +229,7 @@ public class AIPathfinding : MonoBehaviour {
 
     //    } 
     //}
+
 
     void OnDrawGizmos()
     {

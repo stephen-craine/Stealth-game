@@ -6,18 +6,18 @@ public class CreateCollectible : MonoBehaviour {
 
     public Transform Spawnpoint;
     public GameObject Prefab;
-    [SerializeField] public bool collectedA;
+    [SerializeField] public bool collected;
 
     private void Start()
     {
-        collectedA = false;
+        collected = false;
     }
     
 	void OnTriggerEnter () {
-        if (collectedA == false)
+        if (collected == false)
         {
             Instantiate(Prefab, Spawnpoint.position, Spawnpoint.rotation);
-            collectedA = true;
+            collected = true;
         }
 	}
 
