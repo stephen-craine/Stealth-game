@@ -9,7 +9,7 @@ public class AIPathfinding : MonoBehaviour {
 
     [SerializeField] //allows viewing/editing of AIDestination in the Unity editor
     ConnectedWaypoint _currentWaypoint;
-
+    public ConnectedWaypoint myWaypoint;
     ConnectedWaypoint _previousWaypoint;
     NavMeshAgent agent;
     public float patrolSpeed = 7f;
@@ -40,7 +40,7 @@ public class AIPathfinding : MonoBehaviour {
 
     //pathfinding initial setup
     [SerializeField] int waypointsVisited;
-
+    
     [SerializeField] bool travelling;
 
     //[SerializeField] bool _waiting;
@@ -160,6 +160,8 @@ public class AIPathfinding : MonoBehaviour {
 
     }
 
+
+
     private void SetDestination()
     {
         if (waypointsVisited > 0)
@@ -174,6 +176,8 @@ public class AIPathfinding : MonoBehaviour {
         }
 
         Vector3 targetVector = _currentWaypoint.transform.position;
+        myWaypoint = _currentWaypoint;
+        myWaypoint.GetComponent<ConnectedWaypoint>().WeightWaypoint(); //update visiting and weight of waypoint
         agent.SetDestination(targetVector);
         travelling = true;
 
@@ -191,6 +195,8 @@ public class AIPathfinding : MonoBehaviour {
             //    _waiting = true;
             //}
         }
+
+      
 
         if (SpotPlayer())
         {

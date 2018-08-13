@@ -13,8 +13,8 @@ public class CreateCollectible : MonoBehaviour {
         collected = false;
     }
     
-	void OnTriggerEnter () {
-        if (collected == false)
+	void OnTriggerEnter (Collider other) {
+        if (collected == false && other.CompareTag("Player"))
         {
             Instantiate(Prefab, Spawnpoint.position, Spawnpoint.rotation);
             collected = true;

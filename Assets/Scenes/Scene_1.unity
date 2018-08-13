@@ -156,6 +156,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   debugDrawRadius: 1
   _connectivityRadius: 40
+  beingVisited: 0
+  weightWaypoint: 0
 --- !u!1 &38192224 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1619404277796654, guid: 3afc0ab1e0537db48a65bc8c23410ea0,
@@ -332,13 +334,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 54129480}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -20.13, y: 0.25, z: 33.95}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -18.950624, y: 41.40143, z: 9.390968}
   m_LocalScale: {x: 0.012704925, y: 1, z: 5}
   m_Children:
   - {fileID: 74395454}
-  m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_Father: {fileID: 1337229312}
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &74395453
 GameObject:
@@ -601,6 +603,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   debugDrawRadius: 1
   _connectivityRadius: 40
+  beingVisited: 0
+  weightWaypoint: 0
 --- !u!1001 &183039506
 Prefab:
   m_ObjectHideFlags: 0
@@ -1294,6 +1298,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   debugDrawRadius: 1
   _connectivityRadius: 40
+  beingVisited: 0
+  weightWaypoint: 0
 --- !u!1 &440334806
 GameObject:
   m_ObjectHideFlags: 0
@@ -1378,6 +1384,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   debugDrawRadius: 1
   _connectivityRadius: 40
+  beingVisited: 0
+  weightWaypoint: 0
 --- !u!1 &456044112 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1323641322077942, guid: 50ed9e19703cd7b4daf9eae2d81014fa,
@@ -1913,6 +1921,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   debugDrawRadius: 1
   _connectivityRadius: 40
+  beingVisited: 0
+  weightWaypoint: 0
 --- !u!1 &642104994 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1619404277796654, guid: 3afc0ab1e0537db48a65bc8c23410ea0,
@@ -2193,6 +2203,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   debugDrawRadius: 1
   _connectivityRadius: 40
+  beingVisited: 0
+  weightWaypoint: 0
 --- !u!1 &750233161 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1323641322077942, guid: 50ed9e19703cd7b4daf9eae2d81014fa,
@@ -2547,6 +2559,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   debugDrawRadius: 1
   _connectivityRadius: 40
+  beingVisited: 0
+  weightWaypoint: 0
 --- !u!1 &865871349 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1323641322077942, guid: 50ed9e19703cd7b4daf9eae2d81014fa,
@@ -2609,6 +2623,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   debugDrawRadius: 1
   _connectivityRadius: 40
+  beingVisited: 0
+  weightWaypoint: 0
 --- !u!1 &906804881
 GameObject:
   m_ObjectHideFlags: 0
@@ -2651,6 +2667,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   debugDrawRadius: 1
   _connectivityRadius: 40
+  beingVisited: 0
+  weightWaypoint: 0
 --- !u!1 &936260554
 GameObject:
   m_ObjectHideFlags: 0
@@ -2963,13 +2981,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1074195108}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9.19, y: 0.25, z: 37.4}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 10.369374, y: 41.40143, z: 12.840969}
   m_LocalScale: {x: 0.012704925, y: 1, z: 6}
   m_Children:
   - {fileID: 1056531904}
-  m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_Father: {fileID: 1337229312}
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1124260212 stripped
 GameObject:
@@ -3357,6 +3375,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   debugDrawRadius: 1
   _connectivityRadius: 40
+  beingVisited: 0
+  weightWaypoint: 0
 --- !u!4 &1265790858 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4969798416278724, guid: f15341165a0d4ff459405c57508f16ea,
@@ -3745,8 +3765,10 @@ Transform:
   - {fileID: 1838395128}
   - {fileID: 1177672388}
   - {fileID: 2004492779}
+  - {fileID: 1074195113}
+  - {fileID: 54129485}
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1339885460 stripped
 GameObject:
@@ -4073,6 +4095,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   debugDrawRadius: 1
   _connectivityRadius: 40
+  beingVisited: 0
+  weightWaypoint: 0
 --- !u!1001 &1643495997
 Prefab:
   m_ObjectHideFlags: 0
@@ -4282,6 +4306,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   debugDrawRadius: 1
   _connectivityRadius: 40
+  beingVisited: 0
+  weightWaypoint: 0
 --- !u!1 &1790377429
 GameObject:
   m_ObjectHideFlags: 0
@@ -4974,6 +5000,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   debugDrawRadius: 1
   _connectivityRadius: 40
+  beingVisited: 0
+  weightWaypoint: 0
 --- !u!1 &1995785469
 GameObject:
   m_ObjectHideFlags: 0
@@ -5506,6 +5534,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   debugDrawRadius: 1
   _connectivityRadius: 40
+  beingVisited: 0
+  weightWaypoint: 0
 --- !u!1 &2135830713 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1326300642004910, guid: f15341165a0d4ff459405c57508f16ea,

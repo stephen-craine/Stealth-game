@@ -4,13 +4,17 @@ using UnityEngine;
 
 public class ConnectedWaypoint : Waypoint { //subclass of waypoint to find nearby waypoints to make a sensible random path for the AI.
 
-    [SerializeField]
-    protected float _connectivityRadius = 40F;
+    [SerializeField] protected float _connectivityRadius = 40F;
+
+    [SerializeField] public bool beingVisited; //to stop two AI picking the same waypoint as next destination
+    [SerializeField] public int weightWaypoint; //variables for optimising patrolling of multiple AI
 
     List<ConnectedWaypoint> _connections;
 
     public void Start()
     {
+        beingVisited = false;
+        weightWaypoint = 0;
         GameObject[] allWaypoints = GameObject.FindGameObjectsWithTag("Waypoint");
         _connections = new List<ConnectedWaypoint>();
 
@@ -61,5 +65,11 @@ public class ConnectedWaypoint : Waypoint { //subclass of waypoint to find nearb
         }
 
         }
+
+    public void WeightWaypoint()
+    {
+        this.beingVisited = true;
+        this.weightWaypoint += 1;
     }
+}
 
