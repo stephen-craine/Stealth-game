@@ -204,13 +204,14 @@ public class AIPathfinding : MonoBehaviour {
         }
         if (triggerDict != null)
         {
-            foreach (KeyValuePair<GameObject, bool> pair in triggerDict)
+            List<GameObject> keys = new List<GameObject>(triggerDict.Keys);
+            foreach (GameObject s in keys)
             {
 
-                if (pair.Key.GetComponent<CreateCollectible>().collected == true && pair.Value == false)
+                if (s.GetComponent<CreateCollectible>().collected == true && triggerDict[s] == false)
                 {
-                    placeToCheck = pair.Key.GetComponent<CreateCollectible>().Spawnpoint;
-                    triggerDict[pair.Key] = true;
+                    placeToCheck = s.GetComponent<CreateCollectible>().Spawnpoint;
+                    triggerDict[s] = true;
                     state = AIPathfinding.State.INVESTIGATE;
                 }
             }
@@ -231,11 +232,11 @@ public class AIPathfinding : MonoBehaviour {
     //}
 
 
-    void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawRay(transform.position, transform.forward * viewDistance);
-    }
+    //void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.red;
+    //    Gizmos.DrawRay(transform.position, transform.forward * viewDistance);
+    //}
 
     bool SpotPlayer()
     {
