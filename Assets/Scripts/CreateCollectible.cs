@@ -6,7 +6,7 @@ public class CreateCollectible : MonoBehaviour {
 
     public Transform Spawnpoint;
     public GameObject Prefab;
-    private bool collectedA;
+    [SerializeField] public bool collectedA;
 
     private void Start()
     {
@@ -20,6 +20,8 @@ public class CreateCollectible : MonoBehaviour {
             collectedA = true;
         }
 	}
+
+    
 	
 	// Update is called once per frame
 	void Update () {

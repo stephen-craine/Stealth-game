@@ -13,8 +13,8 @@ public class AIPathfinding : MonoBehaviour {
     NavMeshAgent agent;
     public float patrolSpeed = 7f;
     public float chaseSpeed = 9f;
-    public GameObject target;
     Transform player;
+    CreateCollectible hasCollectedA;
 
 
     //enemy sight
@@ -28,18 +28,20 @@ public class AIPathfinding : MonoBehaviour {
     public enum State
     {
         PATROL,
-        CHASE
+        CHASE,
+        INVESTIGATE
     }
     public State state;
+    private bool checkedA;
     private bool alive;
-
+    Transform placeToCheck;
 
     //pathfinding initial setup
     [SerializeField] int waypointsVisited;
 
     [SerializeField] bool travelling;
 
-    [SerializeField] bool _waiting;
+    //[SerializeField] bool _waiting;
 
     //float waitTimer;
 
@@ -55,9 +57,19 @@ public class AIPathfinding : MonoBehaviour {
         player = GameObject.FindGameObjectWithTag("Player").transform; // player transform
         spotLightOriginalColor = spotlight.color;
         viewAngle = spotlight.spotAngle;
-        _waiting = false;
+        //_waiting = false;
         waypointsVisited = 0;
         agent = this.GetComponent<NavMeshAgent>();
+        checkedA = false;
+
+        if((hasCollectedA == null) && (GameObject.FindGameObjectWithTag("Spawnpoint").GetComponent<CreateCollectible>() != null)){
+            hasCollectedA = GameObject.FindGameObjectWithTag("Spawnpoint").GetComponent<CreateCollectible>();
+
+        } else
+        {
+            Debug.LogError("Missing CreateCollectible script component");
+        }
+        
 
 
 
@@ -80,6 +92,9 @@ public class AIPathfinding : MonoBehaviour {
                 case State.CHASE:
                     Chase();
                     break;
+                case State.INVESTIGATE:
+                    Investigate();
+                    break;
             }
             yield return null;
         }
@@ -88,8 +103,13 @@ public class AIPathfinding : MonoBehaviour {
     void Chase()
     {
         agent.speed = chaseSpeed;
-        agent.SetDestination(target.transform.position);
+        agent.SetDestination(player.position);
 
+    }
+
+    void Investigate()
+    {
+        agent.SetDestination(placeToCheck.transform.position);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -97,8 +117,7 @@ public class AIPathfinding : MonoBehaviour {
         //NEED TO GIVE GAME OVER OR LOSE HEALTH
         //if (other.tag == "Player")
         //{
-        //    state = AIPathfinding.State.CHASE;
-        //    target = other.gameObject;
+        //   
         //}
     }
 
@@ -166,10 +185,21 @@ public class AIPathfinding : MonoBehaviour {
         if (SpotPlayer())
         {
             spotlight.color = Color.red;
-        } else
+            state = AIPathfinding.State.CHASE;
+            
+        }
+        else
         {
             spotlight.color = spotLightOriginalColor;
         }
+
+        if ((hasCollectedA != null) && hasCollectedA.collectedA == true && checkedA == false)
+        {
+            placeToCheck = GameObject.FindGameObjectWithTag("Spawnpoint").GetComponent<CreateCollectible>().Spawnpoint;
+            checkedA = true;
+            state = AIPathfinding.State.INVESTIGATE;
+        }
+
 
         //if (_waiting) //if waiting keep waiting until time is up
         //{
