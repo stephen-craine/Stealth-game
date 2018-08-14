@@ -9,14 +9,16 @@ public class ConnectedWaypoint : Waypoint { //subclass of waypoint to find nearb
     [SerializeField] public bool beingVisited; //to stop two AI picking the same waypoint as next destination
     [SerializeField] public int weightWaypoint; //variables for optimising patrolling of multiple AI
 
-    List<ConnectedWaypoint> _connections;
-
+    //List<ConnectedWaypoint> _connections;
+    public Dictionary<ConnectedWaypoint, int> _connections = new Dictionary<ConnectedWaypoint, int>();
+    public List<ConnectedWaypoint> _keys;
+    public List<ConnectedWaypoint> _weightedConnections = new List<ConnectedWaypoint>();
     public void Start()
     {
         beingVisited = false;
         weightWaypoint = 0;
         GameObject[] allWaypoints = GameObject.FindGameObjectsWithTag("Waypoint");
-        _connections = new List<ConnectedWaypoint>();
+        //_connections = new List<ConnectedWaypoint>();
 
         for (int i = 0; i < allWaypoints.Length; i++)
         {
@@ -25,11 +27,27 @@ public class ConnectedWaypoint : Waypoint { //subclass of waypoint to find nearb
             {
                 if(Vector3.Distance(this.transform.position, nextWaypoint.transform.position) <= _connectivityRadius)
                 {
-                    _connections.Add(nextWaypoint); //add to list of nearby connected waypoints.
+                    _connections.Add(nextWaypoint, 0); //add to dictionary with weight of 0.
                 }
             }
 
         }
+        List<ConnectedWaypoint> keys = new List<ConnectedWaypoint>(_connections.Keys);
+        foreach (ConnectedWaypoint item in keys) {
+            _keys.Add(item);
+        }
+    }
+
+    public void FixedUpdate()
+    {
+
+        foreach(ConnectedWaypoint c in _keys)
+        {
+            _connections[c] = c.GetComponent<ConnectedWaypoint>().weightWaypoint; //update current weight in dictionary
+        }
+
+
+
 
     }
     //public override void OnDrawGizmos()
@@ -41,6 +59,39 @@ public class ConnectedWaypoint : Waypoint { //subclass of waypoint to find nearb
     //    Gizmos.DrawWireSphere(transform.position, _connectivityRadius);
     //}
 
+
+    public void Update()
+    {
+        //form list of waypoints with lowest weight do choose randomly from EXCLUDING if they are already 'being visited'
+        
+        List<int> _values = new List<int>(_connections.Values);
+        _values.Sort();
+        int minValue = _values[0];
+
+        foreach (ConnectedWaypoint d in _keys)
+        {
+            if (_connections[d] == minValue)
+            {
+                if (d.GetComponent<ConnectedWaypoint>().beingVisited == false)
+                {
+                    if (!_weightedConnections.Contains(d))
+                    {
+                        _weightedConnections.Add(d); //if it has lowest weight, is not being visited, and is not already in the list then add it.
+                    }
+                }
+            }
+            if (_connections[d] > minValue || d.GetComponent<ConnectedWaypoint>().beingVisited) //if a waypoint is being visited or has a higher than minimum weight, delete it from possible connections
+            {
+                if (_weightedConnections.Contains(d))
+                {
+                    _weightedConnections.Remove(d);
+                }
+            }
+        }
+        /////////////////////////////////////////////////////////////////
+    }
+
+
     public ConnectedWaypoint NextWaypoint(ConnectedWaypoint previousWaypoint)
     {
 
@@ -48,19 +99,20 @@ public class ConnectedWaypoint : Waypoint { //subclass of waypoint to find nearb
         {
             Debug.LogError("No nearby waypoints found!");
             return null;
-        } else if(_connections.Count == 1 && _connections.Contains(previousWaypoint)) { 
+        } else if(_connections.Count == 1 && _connections.ContainsKey(previousWaypoint)) { 
                 return previousWaypoint;
         } else {
-            ConnectedWaypoint nextWaypoint;
+
+
+
+            ConnectedWaypoint nextWaypoint = previousWaypoint; //if cannot find one to visit, return to previous waypoint - only time two AI will visit same spot.
             int nextWaypointIndex = 0;
-
-            do
-            {
-                nextWaypointIndex = UnityEngine.Random.Range(0, _connections.Count);
-                nextWaypoint = _connections[nextWaypointIndex];
-
-            } while (nextWaypoint == previousWaypoint); //if the previous waypoint is selected, loop again until the other is found!
-
+                if (_weightedConnections.Count > 0)
+                {
+                    nextWaypointIndex = UnityEngine.Random.Range(0, _weightedConnections.Count);
+                    nextWaypoint = _weightedConnections[nextWaypointIndex];
+                } 
+                    
             return nextWaypoint;
         }
 

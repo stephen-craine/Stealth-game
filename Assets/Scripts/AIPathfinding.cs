@@ -16,7 +16,7 @@ public class AIPathfinding : MonoBehaviour {
     public float chaseSpeed = 9f;
     Transform player;
    [SerializeField] Dictionary<GameObject, bool> triggerDict = new Dictionary<GameObject, bool>(); //dict of triggers which will be deleted from here when checked
-    //CreateCollectible hasCollectedA;
+
 
 
     //enemy sight
@@ -25,6 +25,7 @@ public class AIPathfinding : MonoBehaviour {
     float viewAngle;
     public LayerMask viewMask;
     Color spotLightOriginalColor;
+
 
     //FSM initial setup
     public enum State
@@ -162,7 +163,7 @@ public class AIPathfinding : MonoBehaviour {
 
 
 
-    private void SetDestination()
+    public void SetDestination()
     {
         if (waypointsVisited > 0)
         {
@@ -187,6 +188,7 @@ public class AIPathfinding : MonoBehaviour {
     {
         if (travelling && agent.remainingDistance <= 1.0f)
         {
+            myWaypoint.GetComponent<ConnectedWaypoint>().beingVisited = false;
             travelling = false;
             waypointsVisited++;
             //if (!_waiting) //if not already waiting, start waiting

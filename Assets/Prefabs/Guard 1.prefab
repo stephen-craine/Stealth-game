@@ -68,7 +68,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1919336230736114}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -10, y: 1, z: 24.8}
+  m_LocalPosition: {x: -23, y: 1, z: 14.02}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4685929204716496}
@@ -143,7 +143,7 @@ Light:
   m_Type: 0
   m_Color: {r: 0.68235296, g: 0.68235296, b: 0.68235296, a: 1}
   m_Intensity: 40
-  m_Range: 6
+  m_Range: 10
   m_SpotAngle: 97.1
   m_CookieSize: 10
   m_Shadows:
@@ -157,7 +157,7 @@ Light:
   m_Cookie: {fileID: 0}
   m_DrawHalo: 0
   m_Flare: {fileID: 0}
-  m_RenderMode: 0
+  m_RenderMode: 1
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -180,18 +180,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _currentWaypoint: {fileID: 0}
+  myWaypoint: {fileID: 0}
   patrolSpeed: 7
   chaseSpeed: 9
-  target: {fileID: 0}
   spotlight: {fileID: 108572199386479006}
-  viewDistance: 3.5
+  viewDistance: 7
   viewMask:
     serializedVersion: 2
-    m_Bits: 2048
+    m_Bits: 2052
   state: 0
   waypointsVisited: 0
   travelling: 0
-  _waiting: 0
 --- !u!136 &136758779950519404
 CapsuleCollider:
   m_ObjectHideFlags: 1
@@ -216,8 +215,8 @@ NavMeshAgent:
   m_Radius: 0.5
   m_Speed: 8
   m_Acceleration: 20
-  avoidancePriority: 50
-  m_AngularSpeed: 360
+  avoidancePriority: 25
+  m_AngularSpeed: 200
   m_StoppingDistance: 0.1
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
