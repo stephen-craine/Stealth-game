@@ -19,6 +19,9 @@ public class AIPathfinding : MonoBehaviour {
     Transform player;
     public NavMeshPath path;
     public float pathLength;
+    public float waiting;
+    public float waitTimer;
+    public bool waitingAgent;
    [SerializeField] Dictionary<GameObject, bool> triggerDict = new Dictionary<GameObject, bool>(); //dict of triggers which will be deleted from here when checked
 
 
@@ -52,6 +55,7 @@ public class AIPathfinding : MonoBehaviour {
 
 
     void Start() {
+
         player = GameObject.FindGameObjectWithTag("Player").transform; // player transform
         spotLightOriginalColor = spotlight.color;
         viewAngle = spotlight.spotAngle;
@@ -96,6 +100,7 @@ public class AIPathfinding : MonoBehaviour {
 
     void Chase()
     {
+        waitingAgent = false;
         agent.speed = chaseSpeed;
         agent.SetDestination(player.position);
 
@@ -103,7 +108,27 @@ public class AIPathfinding : MonoBehaviour {
 
     void Investigate()
     {
+        waiting = 0;
+        waitTimer = 2f;
         agent.SetDestination(placeToCheck.transform.position);
+        if(agent.remainingDistance <= 1.0f)
+        {
+            waitingAgent = true;
+        }
+        while(waitingAgent == true && (waiting <= waitTimer))
+        {
+            if (waiting < waitTimer)
+            {
+                waiting += 1f;
+            }
+            else
+            {
+                state = AIPathfinding.State.PATROL;
+                waitingAgent = false;
+                this.spotlight.color = Color.cyan;
+            }
+        }
+        
     }
 
     private void OnTriggerEnter(Collider other)
@@ -117,6 +142,7 @@ public class AIPathfinding : MonoBehaviour {
 
     void Patrol() {
         agent.speed = patrolSpeed;
+        waitingAgent = false;
         if (agent == null)
         {
             Debug.LogError("Nav mesh agent component not attached to: " + gameObject.name);
@@ -164,6 +190,7 @@ public class AIPathfinding : MonoBehaviour {
 
     public void Update()
     {
+
         if (travelling && agent.remainingDistance <= 1.0f)
         {
             myWaypoint.GetComponent<ConnectedWaypoint>().beingVisited = false;
