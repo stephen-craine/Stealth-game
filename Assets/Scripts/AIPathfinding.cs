@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 
 public class AIPathfinding : MonoBehaviour {
 
+    //Spotlight colours: red- chase, yellow- investigate, cyan- suspicious, white- normal(patrolling), magenta- smart patrol
+    
     [SerializeField] //allows viewing/editing of AIDestination in the Unity editor
     ConnectedWaypoint _currentWaypoint;
     public ConnectedWaypoint myWaypoint;
@@ -15,6 +17,8 @@ public class AIPathfinding : MonoBehaviour {
     public float patrolSpeed = 7f;
     public float chaseSpeed = 9f;
     Transform player;
+    public NavMeshPath path;
+    public float pathLength;
    [SerializeField] Dictionary<GameObject, bool> triggerDict = new Dictionary<GameObject, bool>(); //dict of triggers which will be deleted from here when checked
 
 
@@ -32,7 +36,9 @@ public class AIPathfinding : MonoBehaviour {
     {
         PATROL,
         CHASE,
-        INVESTIGATE
+        INVESTIGATE //1 AI max can be in this state
+            //suspicious
+            //SMART PATROL
     }
     public State state;
     private bool checkedA;
@@ -44,23 +50,11 @@ public class AIPathfinding : MonoBehaviour {
     
     [SerializeField] bool travelling;
 
-    //[SerializeField] bool _waiting;
-
-    //float waitTimer;
-
-    //[SerializeField] float waitTime = 1f;
-
-
-
-
-
-
 
     void Start() {
         player = GameObject.FindGameObjectWithTag("Player").transform; // player transform
         spotLightOriginalColor = spotlight.color;
         viewAngle = spotlight.spotAngle;
-        //_waiting = false;
         waypointsVisited = 0;
 
        
@@ -72,18 +66,7 @@ public class AIPathfinding : MonoBehaviour {
 
         agent = this.GetComponent<NavMeshAgent>();
         
-
-        //if((hasCollectedA == null) && (GameObject.FindGameObjectWithTag("Trigger").GetComponent<CreateCollectible>() != null)){
-        //    hasCollectedA = GameObject.FindGameObjectWithTag("Trigger").GetComponent<CreateCollectible>();
-
-        //} else
-        //{
-        //    Debug.LogError("Missing CreateCollectible script component");
-        //}
-        
-
-
-
+     
         //FSM
         state = AIPathfinding.State.PATROL;
 
@@ -149,19 +132,14 @@ public class AIPathfinding : MonoBehaviour {
                     int random = UnityEngine.Random.Range(0, allWaypoints.Length);
                     ConnectedWaypoint initialWaypoint = allWaypoints[random].GetComponent<ConnectedWaypoint>();
                     _currentWaypoint = initialWaypoint;
-                    //could add debug here in case of not finding a waypoint.
                 }
             }
             if (!travelling)
             {
                 SetDestination();
             }
-
         }
-
     }
-
-
 
     public void SetDestination()
     {
@@ -191,24 +169,20 @@ public class AIPathfinding : MonoBehaviour {
             myWaypoint.GetComponent<ConnectedWaypoint>().beingVisited = false;
             travelling = false;
             waypointsVisited++;
-            //if (!_waiting) //if not already waiting, start waiting
-            //{
-            //    waitTimer = 0f;
-            //    _waiting = true;
-            //}
         }
-
-      
 
         if (SpotPlayer())
         {
             spotlight.color = Color.red;
-            state = AIPathfinding.State.CHASE;
+            state = AIPathfinding.State.CHASE; //need to change this so only 1 AI actively chases and the others go into SMART patrol mode
             
         }
         else
         {
-            spotlight.color = spotLightOriginalColor;
+            if (spotlight.color == Color.red)
+            {
+                spotlight.color = spotLightOriginalColor;
+            }
         }
         if (triggerDict != null)
         {
@@ -220,31 +194,36 @@ public class AIPathfinding : MonoBehaviour {
                 {
                     placeToCheck = s.GetComponent<CreateCollectible>().Spawnpoint;
                     triggerDict[s] = true;
-                    state = AIPathfinding.State.INVESTIGATE;
+                    path = new NavMeshPath();
+                    agent.CalculatePath(placeToCheck.transform.position, path);
+                    checkPath(path);
                 }
             }
         }
-
-
-        //if (_waiting) //if waiting keep waiting until time is up
-        //{
-        //    waitTimer += Time.deltaTime;
-        //    if (waitTimer >= waitTime)
-        //    {
-        //        _waiting = false;
-        //        SetDestination();
     }
 
-
-    //    } 
-    //}
-
-
-    //void OnDrawGizmos()
-    //{
-    //    Gizmos.color = Color.red;
-    //    Gizmos.DrawRay(transform.position, transform.forward * viewDistance);
-    //}
+    void checkPath(NavMeshPath thisPath)
+    {
+        pathLength = thisPath.corners.Length;
+        //Trigger Investigate state for closest guard AI- look at other guards to see if anyone is closer
+        //compare my distance to all other distances for other guards, if I am the smallest, investigate, if not carry on with patrol but suspicious state.
+        GameObject[] guardList = GameObject.FindGameObjectsWithTag("Guard");
+        List<float> pathList = new List<float>();
+            
+        for(int i = 0; i < guardList.Length; i++)
+        {
+            pathList.Add(guardList[i].GetComponent<AIPathfinding>().pathLength);
+        }
+        pathList.Sort();
+        if (this.pathLength == pathList[0]) //if this AI has the shortest path then investigate, otherwise don't
+        {
+            this.spotlight.color = Color.yellow;
+            state = AIPathfinding.State.INVESTIGATE;
+        } else
+        {
+            this.spotlight.color = Color.cyan;
+        }
+    }
 
     bool SpotPlayer()
     {
@@ -262,6 +241,5 @@ public class AIPathfinding : MonoBehaviour {
         }
         return false;
     }
-
 
         }

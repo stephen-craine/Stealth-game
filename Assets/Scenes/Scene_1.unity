@@ -618,7 +618,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4717141556057910, guid: 646300f39501177488404e2dc4f82ad4, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -3.66
+      value: -15.12
       objectReference: {fileID: 0}
     - target: {fileID: 4717141556057910, guid: 646300f39501177488404e2dc4f82ad4, type: 2}
       propertyPath: m_LocalPosition.y
@@ -626,7 +626,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4717141556057910, guid: 646300f39501177488404e2dc4f82ad4, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 21.45
+      value: -17.03
       objectReference: {fileID: 0}
     - target: {fileID: 4717141556057910, guid: 646300f39501177488404e2dc4f82ad4, type: 2}
       propertyPath: m_LocalRotation.x
@@ -686,6 +686,10 @@ Prefab:
     - target: {fileID: 1919336230736114, guid: 646300f39501177488404e2dc4f82ad4, type: 2}
       propertyPath: m_Name
       value: Guard 1 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1919336230736114, guid: 646300f39501177488404e2dc4f82ad4, type: 2}
+      propertyPath: m_TagString
+      value: Guard
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 646300f39501177488404e2dc4f82ad4, type: 2}
@@ -976,6 +980,10 @@ Prefab:
     - target: {fileID: 1919336230736114, guid: 646300f39501177488404e2dc4f82ad4, type: 2}
       propertyPath: m_Name
       value: Guard 1 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1919336230736114, guid: 646300f39501177488404e2dc4f82ad4, type: 2}
+      propertyPath: m_TagString
+      value: Guard
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 646300f39501177488404e2dc4f82ad4, type: 2}
@@ -3408,6 +3416,10 @@ Prefab:
       propertyPath: m_Name
       value: Guard 1 (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 1919336230736114, guid: 646300f39501177488404e2dc4f82ad4, type: 2}
+      propertyPath: m_TagString
+      value: Guard
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 646300f39501177488404e2dc4f82ad4, type: 2}
   m_IsPrefabParent: 0
@@ -4244,6 +4256,10 @@ Prefab:
         type: 2}
       propertyPath: m_Radius
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1919336230736114, guid: 646300f39501177488404e2dc4f82ad4, type: 2}
+      propertyPath: m_TagString
+      value: Guard
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 646300f39501177488404e2dc4f82ad4, type: 2}
