@@ -5,15 +5,6 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 
-
-//To do: 
-    //stop two AI at equal distances inspecting the same point.
-    //if investigating a spot, and another spot is triggered, ignore?
-    //breaking line of sight i.e. work on chase state
-    //add cyan lighting for a time and speed up until moving back to not suspicious
-    //use weighting of waypoints to coordinate a smart patrol state
-    //add a scoring and winning the game
-
 public class AIPathfinding : MonoBehaviour {
 
     //Spotlight colours: red- chase, yellow- investigate, cyan- suspicious, white- normal(patrolling), magenta- smart patrol
@@ -26,6 +17,7 @@ public class AIPathfinding : MonoBehaviour {
     public float patrolSpeed = 7f;
     public float chaseSpeed = 9f;
     Transform player;
+    public NavMeshPath path;
     public float pathLength;
     public float waiting;
     public float waitTimer;
@@ -54,7 +46,7 @@ public class AIPathfinding : MonoBehaviour {
     public State state;
     private bool checkedA;
     private bool alive;
-    public Transform placeToCheck;
+    Transform placeToCheck;
 
     //pathfinding initial setup
     [SerializeField] int waypointsVisited;
@@ -63,7 +55,7 @@ public class AIPathfinding : MonoBehaviour {
 
 
     void Start() {
-        waitingAgent = false;
+
         player = GameObject.FindGameObjectWithTag("Player").transform; // player transform
         spotLightOriginalColor = spotlight.color;
         viewAngle = spotlight.spotAngle;
@@ -108,33 +100,28 @@ public class AIPathfinding : MonoBehaviour {
 
     void Chase()
     {
+        waitingAgent = false;
         agent.speed = chaseSpeed;
         agent.SetDestination(player.position);
 
     }
 
-    public void Investigate()
+    void Investigate()
     {
-        Debug.Log("Investigate");
-        waitingAgent = false;
-        this.spotlight.color = Color.yellow;
-        waiting = 0f;
+        waiting = 0;
         waitTimer = 2f;
-        Vector3 checkVector = placeToCheck.position;
-        agent.SetDestination(checkVector);
-        if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
-            {
-                waitingAgent = true;
-            Debug.Log("HELLO");
+        agent.SetDestination(placeToCheck.transform.position);
+        if(agent.remainingDistance <= 1.0f)
+        {
+            waitingAgent = true;
         }
-
-        while(waitingAgent == true)
+        while(waitingAgent == true && (waiting <= waitTimer))
         {
             if (waiting < waitTimer)
             {
                 waiting += 1f;
             }
-            else if(waiting == waitTimer)
+            else
             {
                 state = AIPathfinding.State.PATROL;
                 waitingAgent = false;
@@ -155,6 +142,7 @@ public class AIPathfinding : MonoBehaviour {
 
     void Patrol() {
         agent.speed = patrolSpeed;
+        waitingAgent = false;
         if (agent == null)
         {
             Debug.LogError("Nav mesh agent component not attached to: " + gameObject.name);
@@ -202,7 +190,8 @@ public class AIPathfinding : MonoBehaviour {
 
     public void Update()
     {
-        if (travelling && agent.remainingDistance <= 1.0f && state == State.PATROL)
+
+        if (travelling && agent.remainingDistance <= 1.0f)
         {
             myWaypoint.GetComponent<ConnectedWaypoint>().beingVisited = false;
             travelling = false;
@@ -232,45 +221,35 @@ public class AIPathfinding : MonoBehaviour {
                 {
                     placeToCheck = s.GetComponent<CreateCollectible>().Spawnpoint;
                     triggerDict[s] = true;
-                    checkPath(agent.transform, placeToCheck);
+                    path = new NavMeshPath();
+                    agent.CalculatePath(placeToCheck.transform.position, path);
+                    checkPath(path);
                 }
             }
         }
     }
 
-    void checkPath(Transform agentPosition, Transform triggerLoc)
+    void checkPath(NavMeshPath thisPath)
     {
-        Debug.Log("Path calculating");
-        pathLength = Vector3.Distance(agentPosition.position, triggerLoc.position);
+        pathLength = thisPath.corners.Length;
         //Trigger Investigate state for closest guard AI- look at other guards to see if anyone is closer
         //compare my distance to all other distances for other guards, if I am the smallest, investigate, if not carry on with patrol but suspicious state.
-        GameObject[] guardList = GameObject.FindGameObjectsWithTag("Guard");  //the items
-        float[] pathList = new float[guardList.Length]; //the keys
+        GameObject[] guardList = GameObject.FindGameObjectsWithTag("Guard");
+        List<float> pathList = new List<float>();
             
         for(int i = 0; i < guardList.Length; i++)
         {
-            pathList[i] = guardList[i].GetComponent<AIPathfinding>().pathLength;
+            pathList.Add(guardList[i].GetComponent<AIPathfinding>().pathLength);
         }
-        Array.Sort(pathList, guardList); //sorts guard list into ascending path lengths
-
-        if (guardList[0].GetComponent<AIPathfinding>().state != State.CHASE) //if the closest guard is not chasing, investigate
+        pathList.Sort();
+        if (this.pathLength == pathList[0]) //if this AI has the shortest path then investigate, otherwise don't
         {
-            if (this.gameObject == guardList[0]) //only change state if this guard is the one
-            {
-
-
-                guardList[0].GetComponent<AIPathfinding>().state = State.INVESTIGATE;
-            }
+            this.spotlight.color = Color.yellow;
+            state = AIPathfinding.State.INVESTIGATE;
+        } else
+        {
+            this.spotlight.color = Color.cyan;
         }
-            foreach(GameObject guard in guardList)
-            {
-                if (guard.GetComponent<AIPathfinding>().state == State.PATROL){
-                //if a guard is patrolling and not sent to investigate/chase then switch to smart patrol or suspicious
-                guard.GetComponent<AIPathfinding>().spotlight.color = Color.cyan;
-                }
-            }
-            
-         
     }
 
     bool SpotPlayer()
