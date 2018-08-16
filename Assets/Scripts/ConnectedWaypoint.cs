@@ -13,8 +13,14 @@ public class ConnectedWaypoint : Waypoint { //subclass of waypoint to find nearb
     public Dictionary<ConnectedWaypoint, int> _connections = new Dictionary<ConnectedWaypoint, int>();
     public List<ConnectedWaypoint> _keys;
     public List<ConnectedWaypoint> _weightedConnections = new List<ConnectedWaypoint>();
+    public string _sector;
+
     public void Start()
     {
+        
+
+
+
         beingVisited = false;
         weightWaypoint = 0;
         GameObject[] allWaypoints = GameObject.FindGameObjectsWithTag("Waypoint");
@@ -25,7 +31,7 @@ public class ConnectedWaypoint : Waypoint { //subclass of waypoint to find nearb
             ConnectedWaypoint nextWaypoint = allWaypoints[i].GetComponent<ConnectedWaypoint>();
             if(nextWaypoint != null && nextWaypoint != this)
             {
-                if(Vector3.Distance(this.transform.position, nextWaypoint.transform.position) <= _connectivityRadius)
+                if(Vector3.Distance(this.transform.position, nextWaypoint.transform.position) <= _connectivityRadius) //if near any other waypoints 
                 {
                     _connections.Add(nextWaypoint, 0); //add to dictionary with weight of 0.
                 }
@@ -37,6 +43,23 @@ public class ConnectedWaypoint : Waypoint { //subclass of waypoint to find nearb
             _keys.Add(item);
         }
     }
+
+    public void CheckSector() 
+    {
+        Collider[] hitColliders = Physics.OverlapSphere(this.transform.position, 1);
+        int i = 0;
+        while(i< hitColliders.Length)
+        {
+            Collider current = hitColliders[i];
+            if(current.tag == "Sector")
+            {
+                _sector = current.gameObject.name;
+            }
+            i++;
+        }
+        
+    }
+
 
     public void FixedUpdate()
     {
@@ -62,6 +85,7 @@ public class ConnectedWaypoint : Waypoint { //subclass of waypoint to find nearb
 
     public void Update()
     {
+        CheckSector();
         //form list of waypoints with lowest weight do choose randomly from EXCLUDING if they are already 'being visited'
         
         List<int> _values = new List<int>(_connections.Values);

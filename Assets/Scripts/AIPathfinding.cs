@@ -39,9 +39,8 @@ public class AIPathfinding : MonoBehaviour {
     {
         PATROL,
         CHASE,
-        INVESTIGATE //1 AI max can be in this state
-            //suspicious
-            //SMART PATROL
+        INVESTIGATE 
+
     }
     public State state;
     private bool checkedA;

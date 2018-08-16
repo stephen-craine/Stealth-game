@@ -8,6 +8,8 @@ TagManager:
   - Waypoint
   - Trigger
   - Guard
+  - SW
+  - Sector
   layers:
   - Default
   - TransparentFX
