@@ -22,6 +22,7 @@ public class AIPathfinding : MonoBehaviour {
     public float waiting;
     public float waitTimer;
     public bool waitingAgent;
+    public string sectorName;
    [SerializeField] Dictionary<GameObject, bool> triggerDict = new Dictionary<GameObject, bool>(); //dict of triggers which will be deleted from here when checked
 
 
@@ -130,12 +131,27 @@ public class AIPathfinding : MonoBehaviour {
         
     }
 
-    private void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
        // NEED TO GIVE GAME OVER OR LOSE HEALTH
         if (other.tag == "Player")
         {
             SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+        }
+
+    }
+    public void CheckMySector()
+    {
+        Collider[] hitColliders = Physics.OverlapSphere(this.transform.position, 2);
+        int i = 0;
+        while (i < hitColliders.Length)
+        {
+            Collider current = hitColliders[i];
+            if (current.tag == "Sector")
+            {
+                sectorName = current.gameObject.name;
+            }
+            i++;
         }
     }
 
@@ -189,7 +205,7 @@ public class AIPathfinding : MonoBehaviour {
 
     public void Update()
     {
-
+        CheckMySector();
         if (travelling && agent.remainingDistance <= 1.0f)
         {
             myWaypoint.GetComponent<ConnectedWaypoint>().beingVisited = false;
