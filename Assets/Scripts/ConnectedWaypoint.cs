@@ -14,10 +14,11 @@ public class ConnectedWaypoint : Waypoint { //subclass of waypoint to find nearb
     public List<ConnectedWaypoint> _keys;
     public List<ConnectedWaypoint> _weightedConnections = new List<ConnectedWaypoint>();
     public string _sector;
+    public bool check;
 
     public void Start()
     {
-        
+        check = false;
 
 
 
@@ -145,6 +146,7 @@ public class ConnectedWaypoint : Waypoint { //subclass of waypoint to find nearb
     public void WeightWaypoint()
     {
         this.beingVisited = true;
+        this.check = true;
         this.weightWaypoint += 1;
     }
 }
