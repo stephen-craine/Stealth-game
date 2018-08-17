@@ -10,7 +10,7 @@ public class AIPathfinding : MonoBehaviour {
     //Spotlight colours: red- chase, yellow- investigate, cyan- suspicious, white- normal(patrolling), magenta- smart patrol
     
     [SerializeField] //allows viewing/editing of AIDestination in the Unity editor
-    ConnectedWaypoint _currentWaypoint;
+    public ConnectedWaypoint _currentWaypoint;
     public ConnectedWaypoint myWaypoint;
     ConnectedWaypoint _previousWaypoint;
     NavMeshAgent agent;
@@ -23,6 +23,7 @@ public class AIPathfinding : MonoBehaviour {
     public float waitTimer;
     public bool waitingAgent;
     public string sectorName;
+    public float chaseTimer;
    [SerializeField] Dictionary<GameObject, bool> triggerDict = new Dictionary<GameObject, bool>(); //dict of triggers which will be deleted from here when checked
 
 
@@ -55,7 +56,7 @@ public class AIPathfinding : MonoBehaviour {
 
 
     void Start() {
-
+        chaseTimer = 0;
         player = GameObject.FindGameObjectWithTag("Player").transform; // player transform
         spotLightOriginalColor = spotlight.color;
         viewAngle = spotlight.spotAngle;
@@ -98,12 +99,12 @@ public class AIPathfinding : MonoBehaviour {
         }
     }
 
-    void Chase()
+    public void Chase()
     {
         waitingAgent = false;
         agent.speed = chaseSpeed;
         agent.SetDestination(player.position);
-
+        chaseTimer += Time.deltaTime;
     }
 
     void Investigate()
@@ -213,12 +214,7 @@ public class AIPathfinding : MonoBehaviour {
             waypointsVisited++;
         }
 
-        if (SpotPlayer())
-        {
-            spotlight.color = Color.red;
-            state = AIPathfinding.State.CHASE; //need to change this so only 1 AI actively chases and the others go into SMART patrol mode
-            
-        }
+        
         else
         {
             if (spotlight.color == Color.red)
@@ -277,6 +273,7 @@ public class AIPathfinding : MonoBehaviour {
             {
                 if(!Physics.Linecast(transform.position, player.position, viewMask))
                 {
+                    chaseTimer = 0; //whenever within cone of vision, reset chase timer
                     return true;
                 }
             }

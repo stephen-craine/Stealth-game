@@ -12,6 +12,7 @@ public class GameDirector : MonoBehaviour {
     public GameObject[] guardList; 
     //public Dictionary<string, GameObject> guardMap;  //key: name, value: guard i.e. map the guards with their names
     public Dictionary<GameObject, string> locDict; //key: guard GameObject, value: sector location that they are colliding with (could be null if between sectors)
+   
     public float checkTimer;
     public GameObject[] waypoints;
     Dictionary<GameObject, bool> testDict;
@@ -19,6 +20,8 @@ public class GameDirector : MonoBehaviour {
     public bool testFinished;
     public int numberOfTests;
     public float totalTestTime;
+    public bool startSuspicious;
+    public float totalChaseTime;
 
     public enum State
     {
@@ -33,11 +36,13 @@ public class GameDirector : MonoBehaviour {
 
     public void Start () {
         //for testing
+        totalChaseTime = 5;
         totalTestTime = 0;
         numberOfTests = 1;
         testFinished = false;
         checkTimer = 0;
         waypoints = GameObject.FindGameObjectsWithTag("Waypoint");
+
         testDict = new Dictionary<GameObject, bool>(); 
         foreach (GameObject _waypoint in waypoints)
         {
@@ -53,51 +58,82 @@ public class GameDirector : MonoBehaviour {
             locDict.Add(guard, guard.GetComponent<AIPathfinding>().sectorName);
         }
 
-        //state = State.NORMAL;
-        //running = true;
-        //StartCoroutine("FSM");
-	}
-	
-    //IEnumerator FSM()
-    //{
-    //    while (running)
-    //    {
-    //        switch (state)
-    //        {
-    //            case State.NORMAL:
-    //                Normal();
-    //                break;
-    //            case State.SUSPICIOUS:
-    //                Suspicious();
-    //                break;
-    //            case State.WIN:
-    //                Win();
-    //                break;
-    //        }
-    //        yield return null;
-    //    }
-    //}
+        state = State.NORMAL;
+        running = true;
+        StartCoroutine("FSM");
+    }
 
-    //private void Normal()
-    //{
-    //    throw new NotImplementedException();
-    //}
+    IEnumerator FSM()
+    {
+        while (running)
+        {
+            switch (state)
+            {
+                case State.NORMAL:
+                    Normal();
+                    break;
+                case State.SUSPICIOUS:
+                    Suspicious();
+                    break;
+                case State.WIN:
+                    Win();
+                    break;
+            }
+            yield return null;
+        }
+    }
 
-    //private void Suspicious()
-    //{
-    //    throw new NotImplementedException();
-    //}
+    private void Normal()
+    {
+            foreach(GameObject guard in guardList)
+        {
+            if (guard.GetComponent<AIPathfinding>().state == AIPathfinding.State.CHASE)
+            {
+                startSuspicious = true;
+                state = State.SUSPICIOUS;
+            }
+        }
+       //add patrolling sectors 1 per guard
+        
+    }
 
-    //private void Win()
-    //{
-    //    throw new NotImplementedException();
-    //}
+    private void Suspicious()
+    {
+        while (startSuspicious == true) // enter state code
+        {
+            List<GameObject> suspiciousGuards = new List<GameObject>(); //list of guards not in active chase to move to guard the sector
+            foreach (GameObject guard in guardList)
+            {
+                if (guard.GetComponent<AIPathfinding>().state == AIPathfinding.State.CHASE)
+                {
+                    GameObject chasingGuard = guard;
+                }
+                else
+                {
+                    suspiciousGuards.Add(guard);
+                }
+            }
+
+            //if chasing move to a waypoint at random from sector
+            //if chase time == chaseTotalTime then move guards back to patrol state and move back to normal director state
+
+
+
+            startSuspicious = false;
+        }
+    }
+
+    private void Win()
+    {
+        throw new NotImplementedException();
+    }
 
     // Update is called once per frame
     public void Update()
+
     {
         checkTimer += Time.deltaTime * 1;
-        //locDict updates@
+        //locDict updates
         if (locDict != null)
         {
 

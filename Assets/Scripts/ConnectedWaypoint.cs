@@ -13,29 +13,45 @@ public class ConnectedWaypoint : Waypoint { //subclass of waypoint to find nearb
     public Dictionary<ConnectedWaypoint, int> _connections = new Dictionary<ConnectedWaypoint, int>();
     public List<ConnectedWaypoint> _keys;
     public List<ConnectedWaypoint> _weightedConnections = new List<ConnectedWaypoint>();
+    public ConnectedWaypoint nextWaypoint;
     public string _sector;
     public bool check;
+    public string str2;
+    public GameObject[] allWaypoints;
+
+    public void Awake()
+    {
+        CheckSector();
+    }
 
     public void Start()
     {
+        CheckSector();
         check = false;
-
 
 
         beingVisited = false;
         weightWaypoint = 0;
-        GameObject[] allWaypoints = GameObject.FindGameObjectsWithTag("Waypoint");
-        //_connections = new List<ConnectedWaypoint>();
+        allWaypoints = GameObject.FindGameObjectsWithTag("Waypoint");
 
-        for (int i = 0; i < allWaypoints.Length; i++)
+        for (int i = 0; i < allWaypoints.Length; i++) //creating list of connected weighpoints
         {
-            ConnectedWaypoint nextWaypoint = allWaypoints[i].GetComponent<ConnectedWaypoint>();
-            if(nextWaypoint != null && nextWaypoint != this)
+            nextWaypoint = allWaypoints[i].GetComponent<ConnectedWaypoint>();
+            if(nextWaypoint != this && nextWaypoint != null)
             {
-                if(Vector3.Distance(this.transform.position, nextWaypoint.transform.position) <= _connectivityRadius) //if near any other waypoints 
+                //if((Vector3.Distance(this.transform.position, nextWaypoint.transform.position) <= _connectivityRadius)) //if near any other waypoints 
+                //{
+                //    _connections.Add(nextWaypoint, 0); //add to dictionary with weight of 0.
+                //}
+                
+                str2 = nextWaypoint.GetComponent<ConnectedWaypoint>()._sector;
+                
+            if (str2.Contains(_sector))
                 {
-                    _connections.Add(nextWaypoint, 0); //add to dictionary with weight of 0.
+                   
+                    _connections.Add(nextWaypoint, 0);
                 }
+
             }
 
         }
@@ -87,44 +103,46 @@ public class ConnectedWaypoint : Waypoint { //subclass of waypoint to find nearb
     public void Update()
     {
         CheckSector();
-        //form list of waypoints with lowest weight do choose randomly from EXCLUDING if they are already 'being visited'
-        
-        List<int> _values = new List<int>(_connections.Values);
-        _values.Sort();
-        int minValue = _values[0];
-
-        foreach (ConnectedWaypoint d in _keys)
+        //form list of waypoints with lowest weight to choose randomly from EXCLUDING if they are already 'being visited'
+        if (_connections.Count == 3)
         {
-            if (_connections[d] == minValue)
+            List<int> _values = new List<int>(_connections.Values);
+            _values.Sort();
+            int minValue = _values[0];
+
+            foreach (ConnectedWaypoint d in _keys)
             {
-                if (d.GetComponent<ConnectedWaypoint>().beingVisited == false)
+                if (_connections[d] == minValue)
                 {
-                    if (!_weightedConnections.Contains(d))
+                    if (d.GetComponent<ConnectedWaypoint>().beingVisited == false)
                     {
-                        _weightedConnections.Add(d); //if it has lowest weight, is not being visited, and is not already in the list then add it.
+                        if (!_weightedConnections.Contains(d))
+                        {
+                            _weightedConnections.Add(d); //if it has lowest weight, is not being visited, and is not already in the list then add it.
+                        }
+                    }
+                }
+                if (_connections[d] > minValue || d.GetComponent<ConnectedWaypoint>().beingVisited) //if a waypoint is being visited or has a higher than minimum weight, delete it from possible connections
+                {
+                    if (_weightedConnections.Contains(d))
+                    {
+                        _weightedConnections.Remove(d);
                     }
                 }
             }
-            if (_connections[d] > minValue || d.GetComponent<ConnectedWaypoint>().beingVisited) //if a waypoint is being visited or has a higher than minimum weight, delete it from possible connections
-            {
-                if (_weightedConnections.Contains(d))
-                {
-                    _weightedConnections.Remove(d);
-                }
-            }
+            /////////////////////////////////////////////////////////////////
         }
-        /////////////////////////////////////////////////////////////////
     }
 
 
     public ConnectedWaypoint NextWaypoint(ConnectedWaypoint previousWaypoint)
     {
 
-        if(_connections.Count == 0)
+        if(_weightedConnections.Count == 0)
         {
             Debug.LogError("No nearby waypoints found!");
             return null;
-        } else if(_connections.Count == 1 && _connections.ContainsKey(previousWaypoint)) { 
+        } else if(_weightedConnections.Count == 1 && _weightedConnections.Contains(previousWaypoint)) { 
                 return previousWaypoint;
         } else {
 
