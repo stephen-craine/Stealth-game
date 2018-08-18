@@ -27,6 +27,15 @@ public class ConnectedWaypoint : Waypoint { //subclass of waypoint to find nearb
     public void Start()
     {
         CheckSector();
+        GameObject[] sectors = GameObject.FindGameObjectsWithTag("Sector");
+        foreach(GameObject s in sectors)
+        {
+            if (s.name == _sector)
+            {
+                s.GetComponent<SectorScript>().wpsInSector.Add(this.gameObject); //add the waypoints in each sector to a list wpsInSector
+            }
+        }
+
         check = false;
 
 
