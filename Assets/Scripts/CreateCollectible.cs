@@ -6,6 +6,7 @@ public class CreateCollectible : MonoBehaviour {
 
     public Transform Spawnpoint;
     public GameObject Prefab;
+<<<<<<< HEAD
     [SerializeField] public bool collected;
 
     private void Start()
@@ -19,6 +20,11 @@ public class CreateCollectible : MonoBehaviour {
             Instantiate(Prefab, Spawnpoint.position, Spawnpoint.rotation);
             collected = true;
         }
+=======
+
+	void OnTriggerEnter () {
+        Instantiate(Prefab, Spawnpoint.position, Spawnpoint.rotation);
+>>>>>>> parent of 60fc7fc... Simple waypoint for AI pathing
 	}
 
     

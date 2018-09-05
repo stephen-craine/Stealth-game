@@ -2,37 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UI;
 
 public class CharacterController : MonoBehaviour
 {
+<<<<<<< HEAD
     public float moveSpeed = 12f;
     public Text scoreText;
     public Text winText;
+=======
+    public float moveSpeed = 12;
+>>>>>>> parent of 60fc7fc... Simple waypoint for AI pathing
     public Camera playerCamera;
     public NavMeshAgent playerAI;
-    private int score;
 
 
     void Start()
     {
-        score = 0;
-        setScore();
-        winText.text = "";
     }
 
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("Key"))
-        {
-            other.gameObject.SetActive(false);
-            score += 1;
-            setScore();
-        }    
-    }
+
 
     void Update()
     {
+<<<<<<< HEAD
 
         //move relative to world space (so rotation doesn't affect movement)
         var x = moveSpeed * Input.GetAxis("Horizontal") * Time.deltaTime;
@@ -44,9 +36,13 @@ public class CharacterController : MonoBehaviour
 
         // prevent cube snapping to angle if there is no movement
         if (Input.GetAxis("Horizontal") != 0f || Input.GetAxis("Vertical") != 0f)
+=======
+        if (Input.GetMouseButtonDown(0))
+>>>>>>> parent of 60fc7fc... Simple waypoint for AI pathing
         {
             transform.rotation = Quaternion.Euler(0f, angle, 0f);
         }
+<<<<<<< HEAD
     }
     //NavMesh controls if using player as AI agent for click to move).
     //if (Input.GetMouseButtonDown(0))
@@ -60,15 +56,10 @@ public class CharacterController : MonoBehaviour
     //    }
     //}
 
+=======
+>>>>>>> parent of 60fc7fc... Simple waypoint for AI pathing
 
 
-    void setScore()
-    {
-        scoreText.text = "Score: " + score.ToString();
-        if(score >= 1)
-        {
-            winText.text = "You did it!";
-        }
     }
 }
 
