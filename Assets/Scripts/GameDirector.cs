@@ -12,7 +12,8 @@ public class GameDirector : MonoBehaviour {
     public GameObject[] guardList;
     //public Dictionary<string, GameObject> guardMap;  //key: name, value: guard i.e. map the guards with their names
     public Dictionary<GameObject, string> locDict; //key: guard GameObject, value: sector location that they are colliding with (could be null if between sectors)
-
+    public Dictionary<GameObject, ConnectedWaypoint> initialDict = new Dictionary<GameObject, ConnectedWaypoint>();
+   
     public float checkTimer;
     public GameObject[] waypoints;
     Dictionary<GameObject, bool> testDict;
@@ -22,19 +23,50 @@ public class GameDirector : MonoBehaviour {
     public float totalTestTime;
     public bool startSuspicious;
     public float totalChaseTime;
+    public GameObject[] sectorList;
+    public List<GameObject> _sectors;
+    public bool enterNormal;
+    public bool paused;
+    public List<GameObject> randomInitialList;
+
+
 
     public enum State
     {
         NORMAL,
         SUSPICIOUS,
         WIN
-
+                
     }
     public bool running;
     public State state;
 
 
+    public void Awake()
+    {
+        paused = true;
+        GetInitial();
+    }
+
     public void Start () {
+        
+        _sectors = new List<GameObject>();
+        guardList =  GameObject.FindGameObjectsWithTag("Guard");
+        string[] sectorsWithWPS = new string[] { "NW", "NE", "SW", "SE" };
+        sectorList = GameObject.FindGameObjectsWithTag("Sector");
+
+        foreach(GameObject i in sectorList)
+        {
+            foreach(string j in sectorsWithWPS)
+            {
+                if (string.Equals(i.name, j))
+                {
+                    _sectors.Add(i); //list of sectors that contain waypoints
+                }
+            }
+            
+        }
+         
         //for testing
         totalChaseTime = 5;
         totalTestTime = 0;
@@ -43,7 +75,7 @@ public class GameDirector : MonoBehaviour {
         checkTimer = 0;
         waypoints = GameObject.FindGameObjectsWithTag("Waypoint");
 
-        testDict = new Dictionary<GameObject, bool>();
+        testDict = new Dictionary<GameObject, bool>(); 
         foreach (GameObject _waypoint in waypoints)
         {
             testDict.Add(_waypoint, false);
@@ -52,12 +84,12 @@ public class GameDirector : MonoBehaviour {
         //for pathfinding
         locDict = new Dictionary<GameObject, string>();
         //guardMap = new Dictionary<string, GameObject>();
-        guardList = GameObject.FindGameObjectsWithTag("Guard"); //populate guardList at start- each guard can be referenced individually using name
+         //populate guardList at start- each guard can be referenced individually using name
         foreach (GameObject guard in guardList)
         {
             locDict.Add(guard, guard.GetComponent<AIPathfinding>().sectorName);
         }
-
+        enterNormal = true;
         state = State.NORMAL;
         running = true;
         StartCoroutine("FSM");
@@ -83,28 +115,27 @@ public class GameDirector : MonoBehaviour {
         }
     }
 
-    private void Normal()
+    public void GetInitial()
     {
-            foreach(GameObject guard in guardList)
+        if (guardList.Length == 4)
         {
             int i = 0;
 
             initialDict = new Dictionary<GameObject, ConnectedWaypoint>();
             while (i < guardList.Length)
             {
-
+             
                 randomInitialList = new List<GameObject>();
                 randomInitialList = _sectors[i].GetComponent<SectorScript>().wpsInSector;
                 //add patrolling sectors 1 per guard i.e. give them an initial waypoint in each sector as waypoints are connected by sector and they start new patrol route
                 int random = UnityEngine.Random.Range(0, _sectors.Count);
                 initialDict.Add(guardList[i], randomInitialList[random].GetComponent<ConnectedWaypoint>());
                 i++;
-
+                
             }
             paused = false;
         }
-       //add patrolling sectors 1 per guard
-
+        
     }
         public void Normal()
     {
@@ -114,7 +145,7 @@ public class GameDirector : MonoBehaviour {
 
             enterNormal = false;
         }
-
+        
             foreach(GameObject guard in guardList)
         {
             AIPathfinding.State currentState = guard.GetComponent<AIPathfinding>().state;
@@ -127,12 +158,12 @@ public class GameDirector : MonoBehaviour {
             {
                 return;
             }
+            
 
-
-
+            
         }
-
-
+       
+        
     }
 
     private void Suspicious()
@@ -230,7 +261,7 @@ public class GameDirector : MonoBehaviour {
         }
 
 
-
+        
     }
 
     public void WriteText(string textA)
@@ -240,7 +271,7 @@ public class GameDirector : MonoBehaviour {
         writer.WriteLine(textA);
         writer.Close();
         testFinished = true;
-
+ 
     }
-
+	
 }

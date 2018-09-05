@@ -160,7 +160,11 @@ MonoBehaviour:
   weightWaypoint: 0
   _keys: []
   _weightedConnections: []
+  nextWaypoint: {fileID: 0}
   _sector: 
+  check: 0
+  str2: 
+  allWaypoints: []
 --- !u!1 &38192224 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1619404277796654, guid: 3afc0ab1e0537db48a65bc8c23410ea0,
@@ -571,21 +575,11 @@ GameObject:
   m_PrefabInternal: {fileID: 0}
   serializedVersion: 5
   m_Component:
-<<<<<<< HEAD
   - component: {fileID: 158859970}
   - component: {fileID: 158859971}
   m_Layer: 0
   m_Name: AI Waypoint1 (12)
   m_TagString: Waypoint
-=======
-  - component: {fileID: 145736207}
-  - component: {fileID: 145736211}
-  - component: {fileID: 145736210}
-  - component: {fileID: 145736209}
-  m_Layer: 10
-  m_Name: Guard 1
-  m_TagString: Untagged
->>>>>>> parent of 60fc7fc... Simple waypoint for AI pathing
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -603,7 +597,6 @@ Transform:
   m_Father: {fileID: 440334807}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-<<<<<<< HEAD
 --- !u!114 &158859971
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -621,13 +614,13 @@ MonoBehaviour:
   weightWaypoint: 0
   _keys: []
   _weightedConnections: []
+  nextWaypoint: {fileID: 0}
   _sector: 
+  check: 0
+  str2: 
+  allWaypoints: []
 --- !u!1001 &172210820
 Prefab:
-=======
---- !u!136 &145736209
-CapsuleCollider:
->>>>>>> parent of 60fc7fc... Simple waypoint for AI pathing
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
@@ -760,6 +753,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   guardsInSector: []
+  wpsInSector: []
 --- !u!65 &177656972
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -812,13 +806,8 @@ MeshFilter:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-<<<<<<< HEAD
   m_GameObject: {fileID: 177656969}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
-=======
-  m_GameObject: {fileID: 145736206}
-  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
->>>>>>> parent of 60fc7fc... Simple waypoint for AI pathing
 --- !u!1001 &183039506
 Prefab:
   m_ObjectHideFlags: 0
@@ -1145,7 +1134,6 @@ NavMeshObstacle:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 269860672}
   m_Enabled: 1
-<<<<<<< HEAD
   serializedVersion: 3
   m_Shape: 1
   m_Extents: {x: 0.5, y: 0.5, z: 0.5}
@@ -1154,37 +1142,6 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5
-=======
-  serializedVersion: 8
-  m_Type: 0
-  m_Color: {r: 0.6039216, g: 0.36672786, b: 0, a: 1}
-  m_Intensity: 40
-  m_Range: 6
-  m_SpotAngle: 97.1
-  m_CookieSize: 10
-  m_Shadows:
-    m_Type: 2
-    m_Resolution: -1
-    m_CustomResolution: -1
-    m_Strength: 1
-    m_Bias: 0.05
-    m_NormalBias: 0.4
-    m_NearPlane: 0.2
-  m_Cookie: {fileID: 0}
-  m_DrawHalo: 0
-  m_Flare: {fileID: 0}
-  m_RenderMode: 0
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_Lightmapping: 4
-  m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 1
-  m_ColorTemperature: 6570
-  m_UseColorTemperature: 0
-  m_ShadowRadius: 0
-  m_ShadowAngle: 0
->>>>>>> parent of 60fc7fc... Simple waypoint for AI pathing
 --- !u!1001 &275395728
 Prefab:
   m_ObjectHideFlags: 0
@@ -1331,7 +1288,6 @@ Transform:
   m_PrefabParentObject: {fileID: 4921613283019092, guid: 50ed9e19703cd7b4daf9eae2d81014fa,
     type: 2}
   m_PrefabInternal: {fileID: 317152901}
-<<<<<<< HEAD
 --- !u!1 &329720179
 GameObject:
   m_ObjectHideFlags: 0
@@ -1394,8 +1350,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-=======
->>>>>>> parent of 60fc7fc... Simple waypoint for AI pathing
 --- !u!1001 &336020954
 Prefab:
   m_ObjectHideFlags: 0
@@ -1606,6 +1560,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   guardsInSector: []
+  wpsInSector: []
 --- !u!65 &409649924
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1739,7 +1694,11 @@ MonoBehaviour:
   weightWaypoint: 0
   _keys: []
   _weightedConnections: []
+  nextWaypoint: {fileID: 0}
   _sector: 
+  check: 0
+  str2: 
+  allWaypoints: []
 --- !u!1 &440334806
 GameObject:
   m_ObjectHideFlags: 0
@@ -1782,11 +1741,7 @@ Transform:
   - {fileID: 568209693}
   - {fileID: 483283357}
   m_Father: {fileID: 0}
-<<<<<<< HEAD
   m_RootOrder: 8
-=======
-  m_RootOrder: 3
->>>>>>> parent of 60fc7fc... Simple waypoint for AI pathing
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &443633116
 GameObject:
@@ -1828,14 +1783,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d98cd37dd56e0314298abdfb0bbe35a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-<<<<<<< HEAD
   debugDrawRadius: 1
   _connectivityRadius: 40
   beingVisited: 0
   weightWaypoint: 0
   _keys: []
   _weightedConnections: []
+  nextWaypoint: {fileID: 0}
   _sector: 
+  check: 0
+  str2: 
+  allWaypoints: []
 --- !u!1 &456044112 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1323641322077942, guid: 50ed9e19703cd7b4daf9eae2d81014fa,
@@ -1843,13 +1801,6 @@ GameObject:
   m_PrefabInternal: {fileID: 2005779006}
 --- !u!208 &456044113
 NavMeshObstacle:
-=======
-  moveSpeed: 12
-  playerCamera: {fileID: 1995785472}
-  playerAI: {fileID: 522748927}
---- !u!195 &522748927
-NavMeshAgent:
->>>>>>> parent of 60fc7fc... Simple waypoint for AI pathing
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
@@ -1991,7 +1942,11 @@ MonoBehaviour:
   weightWaypoint: 0
   _keys: []
   _weightedConnections: []
+  nextWaypoint: {fileID: 0}
   _sector: 
+  check: 0
+  str2: 
+  allWaypoints: []
 --- !u!1 &487325204
 GameObject:
   m_ObjectHideFlags: 0
@@ -2023,6 +1978,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   guardsInSector: []
+  wpsInSector: []
 --- !u!65 &487325206
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2413,7 +2369,11 @@ MonoBehaviour:
   weightWaypoint: 0
   _keys: []
   _weightedConnections: []
+  nextWaypoint: {fileID: 0}
   _sector: 
+  check: 0
+  str2: 
+  allWaypoints: []
 --- !u!1001 &574752466
 Prefab:
   m_ObjectHideFlags: 0
@@ -2574,7 +2534,11 @@ MonoBehaviour:
   weightWaypoint: 0
   _keys: []
   _weightedConnections: []
+  nextWaypoint: {fileID: 0}
   _sector: 
+  check: 0
+  str2: 
+  allWaypoints: []
 --- !u!1 &642104994 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1619404277796654, guid: 3afc0ab1e0537db48a65bc8c23410ea0,
@@ -2844,6 +2808,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   guardsInSector: []
+  wpsInSector: []
 --- !u!65 &745589213
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2957,7 +2922,11 @@ MonoBehaviour:
   weightWaypoint: 0
   _keys: []
   _weightedConnections: []
+  nextWaypoint: {fileID: 0}
   _sector: 
+  check: 0
+  str2: 
+  allWaypoints: []
 --- !u!1 &750233161 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1323641322077942, guid: 50ed9e19703cd7b4daf9eae2d81014fa,
@@ -3316,7 +3285,11 @@ MonoBehaviour:
   weightWaypoint: 0
   _keys: []
   _weightedConnections: []
+  nextWaypoint: {fileID: 0}
   _sector: 
+  check: 0
+  str2: 
+  allWaypoints: []
 --- !u!1 &865871349 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1323641322077942, guid: 50ed9e19703cd7b4daf9eae2d81014fa,
@@ -3383,7 +3356,11 @@ MonoBehaviour:
   weightWaypoint: 0
   _keys: []
   _weightedConnections: []
+  nextWaypoint: {fileID: 0}
   _sector: 
+  check: 0
+  str2: 
+  allWaypoints: []
 --- !u!1 &906804881
 GameObject:
   m_ObjectHideFlags: 0
@@ -3430,7 +3407,11 @@ MonoBehaviour:
   weightWaypoint: 0
   _keys: []
   _weightedConnections: []
+  nextWaypoint: {fileID: 0}
   _sector: 
+  check: 0
+  str2: 
+  allWaypoints: []
 --- !u!1 &936260554
 GameObject:
   m_ObjectHideFlags: 0
@@ -3782,6 +3763,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   guardsInSector: []
+  wpsInSector: []
 --- !u!65 &1085304125
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3999,13 +3981,8 @@ Transform:
 Transform:
   m_PrefabParentObject: {fileID: 4921613283019092, guid: 50ed9e19703cd7b4daf9eae2d81014fa,
     type: 2}
-<<<<<<< HEAD
   m_PrefabInternal: {fileID: 202393587}
 --- !u!1001 &1175573632
-=======
-  m_PrefabInternal: {fileID: 678531024}
---- !u!1001 &794408938
->>>>>>> parent of 60fc7fc... Simple waypoint for AI pathing
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -4270,15 +4247,9 @@ Transform:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-<<<<<<< HEAD
   m_GameObject: {fileID: 1239200162}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 28.2, y: 19.80663, z: 47.2}
-=======
-  m_GameObject: {fileID: 936260554}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.5}
->>>>>>> parent of 60fc7fc... Simple waypoint for AI pathing
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 440334807}
@@ -4301,7 +4272,11 @@ MonoBehaviour:
   weightWaypoint: 0
   _keys: []
   _weightedConnections: []
+  nextWaypoint: {fileID: 0}
   _sector: 
+  check: 0
+  str2: 
+  allWaypoints: []
 --- !u!4 &1265790858 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4969798416278724, guid: f15341165a0d4ff459405c57508f16ea,
@@ -4717,11 +4692,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1337919258}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-<<<<<<< HEAD
   m_LocalPosition: {x: -3.4324565, y: -8.349945, z: -13.1796875}
-=======
-  m_LocalPosition: {x: 1091, y: 0.5, z: -3.47}
->>>>>>> parent of 60fc7fc... Simple waypoint for AI pathing
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1699614968}
@@ -5066,7 +5037,11 @@ MonoBehaviour:
   weightWaypoint: 0
   _keys: []
   _weightedConnections: []
+  nextWaypoint: {fileID: 0}
   _sector: 
+  check: 0
+  str2: 
+  allWaypoints: []
 --- !u!1001 &1643495997
 Prefab:
   m_ObjectHideFlags: 0
@@ -5125,7 +5100,6 @@ Prefab:
 Transform:
   m_PrefabParentObject: {fileID: 4574339579797756, guid: 3afc0ab1e0537db48a65bc8c23410ea0,
     type: 2}
-<<<<<<< HEAD
   m_PrefabInternal: {fileID: 1643495997}
 --- !u!1 &1643727584 stripped
 GameObject:
@@ -5236,11 +5210,6 @@ GameObject:
   m_IsActive: 1
 --- !u!65 &1699614965
 BoxCollider:
-=======
-  m_PrefabInternal: {fileID: 1283168866}
---- !u!1001 &1287813853
-Prefab:
->>>>>>> parent of 60fc7fc... Simple waypoint for AI pathing
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
@@ -5318,6 +5287,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   guardsInSector: []
+  wpsInSector: []
 --- !u!1 &1720487214 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1326300642004910, guid: f15341165a0d4ff459405c57508f16ea,
@@ -5384,7 +5354,11 @@ MonoBehaviour:
   weightWaypoint: 0
   _keys: []
   _weightedConnections: []
+  nextWaypoint: {fileID: 0}
   _sector: 
+  check: 0
+  str2: 
+  allWaypoints: []
 --- !u!1 &1790377429
 GameObject:
   m_ObjectHideFlags: 0
@@ -5417,6 +5391,80 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1803884675
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1803884676}
+  - component: {fileID: 1803884678}
+  - component: {fileID: 1803884677}
+  m_Layer: 5
+  m_Name: WinText
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1803884676
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1803884675}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 691675244}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: -150}
+  m_SizeDelta: {x: 160, y: 30}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1803884677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1803884675}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 0.9575472, b: 0.9575472, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 27
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 0
+    m_MaxSize: 112
+    m_Alignment: 0
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: 
+--- !u!222 &1803884678
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1803884675}
 --- !u!1001 &1807125761
 Prefab:
   m_ObjectHideFlags: 0
@@ -5964,7 +6012,6 @@ Transform:
   m_Father: {fileID: 1337229312}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-<<<<<<< HEAD
 --- !u!1 &1983164560
 GameObject:
   m_ObjectHideFlags: 0
@@ -6011,18 +6058,11 @@ MonoBehaviour:
   weightWaypoint: 0
   _keys: []
   _weightedConnections: []
+  nextWaypoint: {fileID: 0}
   _sector: 
-<<<<<<< HEAD
-<<<<<<< HEAD
   check: 0
   str2: 
   allWaypoints: []
-=======
->>>>>>> parent of 60fc7fc... Simple waypoint for AI pathing
-=======
->>>>>>> parent of 58146f4... Patrol by sector complete
-=======
->>>>>>> parent of 58146f4... Patrol by sector complete
 --- !u!1 &1995785469
 GameObject:
   m_ObjectHideFlags: 0
@@ -6103,7 +6143,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 75, y: 0, z: 0}
 --- !u!114 &1995785474
 MonoBehaviour:
@@ -6411,7 +6451,7 @@ GameObject:
   - component: {fileID: 2097785947}
   m_Layer: 0
   m_Name: GameDirector
-  m_TagString: Untagged
+  m_TagString: GameController
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6428,6 +6468,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   guardList: []
+  checkTimer: 0
+  waypoints: []
+  testTrue: 0
+  testFinished: 0
+  numberOfTests: 0
+  totalTestTime: 0
+  startSuspicious: 0
+  totalChaseTime: 0
+  sectorList: []
+  _sectors: []
+  enterNormal: 0
+  randomInitialList: []
   running: 0
   state: 0
 --- !u!4 &2097785948
@@ -6602,7 +6654,11 @@ MonoBehaviour:
   weightWaypoint: 0
   _keys: []
   _weightedConnections: []
+  nextWaypoint: {fileID: 0}
   _sector: 
+  check: 0
+  str2: 
+  allWaypoints: []
 --- !u!1 &2135830713 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1326300642004910, guid: f15341165a0d4ff459405c57508f16ea,
