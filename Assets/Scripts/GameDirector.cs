@@ -9,10 +9,10 @@ using System.IO;
 public class GameDirector : MonoBehaviour {
 
     //variables
-    public GameObject[] guardList; 
+    public GameObject[] guardList;
     //public Dictionary<string, GameObject> guardMap;  //key: name, value: guard i.e. map the guards with their names
     public Dictionary<GameObject, string> locDict; //key: guard GameObject, value: sector location that they are colliding with (could be null if between sectors)
-   
+
     public float checkTimer;
     public GameObject[] waypoints;
     Dictionary<GameObject, bool> testDict;
@@ -28,7 +28,7 @@ public class GameDirector : MonoBehaviour {
         NORMAL,
         SUSPICIOUS,
         WIN
-                
+
     }
     public bool running;
     public State state;
@@ -43,7 +43,7 @@ public class GameDirector : MonoBehaviour {
         checkTimer = 0;
         waypoints = GameObject.FindGameObjectsWithTag("Waypoint");
 
-        testDict = new Dictionary<GameObject, bool>(); 
+        testDict = new Dictionary<GameObject, bool>();
         foreach (GameObject _waypoint in waypoints)
         {
             testDict.Add(_waypoint, false);
@@ -87,14 +87,52 @@ public class GameDirector : MonoBehaviour {
     {
             foreach(GameObject guard in guardList)
         {
-            if (guard.GetComponent<AIPathfinding>().state == AIPathfinding.State.CHASE)
+            int i = 0;
+
+            initialDict = new Dictionary<GameObject, ConnectedWaypoint>();
+            while (i < guardList.Length)
+            {
+
+                randomInitialList = new List<GameObject>();
+                randomInitialList = _sectors[i].GetComponent<SectorScript>().wpsInSector;
+                //add patrolling sectors 1 per guard i.e. give them an initial waypoint in each sector as waypoints are connected by sector and they start new patrol route
+                int random = UnityEngine.Random.Range(0, _sectors.Count);
+                initialDict.Add(guardList[i], randomInitialList[random].GetComponent<ConnectedWaypoint>());
+                i++;
+
+            }
+            paused = false;
+        }
+       //add patrolling sectors 1 per guard
+
+    }
+        public void Normal()
+    {
+        if (enterNormal == true)
+        {
+            GetInitial();
+
+            enterNormal = false;
+        }
+
+            foreach(GameObject guard in guardList)
+        {
+            AIPathfinding.State currentState = guard.GetComponent<AIPathfinding>().state;
+            if (currentState == AIPathfinding.State.CHASE)
             {
                 startSuspicious = true;
                 state = State.SUSPICIOUS;
             }
+            else if (currentState == AIPathfinding.State.INVESTIGATE)
+            {
+                return;
+            }
+
+
+
         }
-       //add patrolling sectors 1 per guard
-        
+
+
     }
 
     private void Suspicious()
@@ -192,7 +230,7 @@ public class GameDirector : MonoBehaviour {
         }
 
 
-        
+
     }
 
     public void WriteText(string textA)
@@ -202,7 +240,7 @@ public class GameDirector : MonoBehaviour {
         writer.WriteLine(textA);
         writer.Close();
         testFinished = true;
- 
+
     }
-	
+
 }

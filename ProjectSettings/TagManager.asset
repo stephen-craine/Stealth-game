@@ -3,17 +3,7 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-<<<<<<< HEAD
-  tags:
-  - Key
-  - Waypoint
-  - Trigger
-  - Guard
-  - SW
-  - Sector
-=======
   tags: []
->>>>>>> parent of 60fc7fc... Simple waypoint for AI pathing
   layers:
   - Default
   - TransparentFX
@@ -23,10 +13,10 @@ TagManager:
   - UI
   - 
   - 
-  - PostProcessing
-  - Player
-  - Guard
-  - Obstacle
+  - 
+  - 
+  - 
+  - 
   - 
   - 
   - 

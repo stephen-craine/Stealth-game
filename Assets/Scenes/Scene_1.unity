@@ -6013,11 +6013,14 @@ MonoBehaviour:
   _weightedConnections: []
   _sector: 
 <<<<<<< HEAD
+<<<<<<< HEAD
   check: 0
   str2: 
   allWaypoints: []
 =======
 >>>>>>> parent of 60fc7fc... Simple waypoint for AI pathing
+=======
+>>>>>>> parent of 58146f4... Patrol by sector complete
 =======
 >>>>>>> parent of 58146f4... Patrol by sector complete
 --- !u!1 &1995785469
