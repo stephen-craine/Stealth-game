@@ -17,7 +17,6 @@ public class AIPathfinding : MonoBehaviour {
     public float patrolSpeed = 7f;
     public float chaseSpeed = 9f;
     Transform player;
-    public ConnectedWaypoint initialWaypoint;
     public NavMeshPath path;
     public float pathLength;
     public float waiting;
@@ -25,7 +24,6 @@ public class AIPathfinding : MonoBehaviour {
     public bool waitingAgent;
     public string sectorName;
     public float chaseTimer;
-    public bool enterPatrol;
    [SerializeField] Dictionary<GameObject, bool> triggerDict = new Dictionary<GameObject, bool>(); //dict of triggers which will be deleted from here when checked
 
 
@@ -36,7 +34,7 @@ public class AIPathfinding : MonoBehaviour {
     float viewAngle;
     public LayerMask viewMask;
     Color spotLightOriginalColor;
-    public GameObject gameController;
+
 
     //FSM initial setup
     public enum State
@@ -58,8 +56,6 @@ public class AIPathfinding : MonoBehaviour {
 
 
     void Start() {
-        gameController = GameObject.FindGameObjectWithTag("GameController");
-        enterPatrol = true;
         chaseTimer = 0;
         player = GameObject.FindGameObjectWithTag("Player").transform; // player transform
         spotLightOriginalColor = spotlight.color;
@@ -74,10 +70,9 @@ public class AIPathfinding : MonoBehaviour {
         }
 
         agent = this.GetComponent<NavMeshAgent>();
-
-
-        //FSM
         
+     
+        //FSM
         state = AIPathfinding.State.PATROL;
 
         alive = true;
@@ -86,11 +81,7 @@ public class AIPathfinding : MonoBehaviour {
     }
     IEnumerator FSM()
     {
-        while (gameController.GetComponent<GameDirector>().paused == true)
-        {
-            yield return null;
-        }
-            while (alive)
+        while (alive)
         {
             switch (state)
             {
@@ -165,38 +156,35 @@ public class AIPathfinding : MonoBehaviour {
         }
     }
 
-
-    public void Patrol() {
-        
-        
-
-        if (enterPatrol == true)
-        {
-            
-            Debug.Log("Patrol start");
-            Debug.Log(this.gameObject);
-            initialWaypoint = gameController.GetComponent<GameDirector>().initialDict[this.gameObject];
-            _currentWaypoint = initialWaypoint;
-            _previousWaypoint = initialWaypoint;
-            enterPatrol = false;
-        }
+    void Patrol() {
         agent.speed = patrolSpeed;
         waitingAgent = false;
         if (agent == null)
         {
             Debug.LogError("Nav mesh agent component not attached to: " + gameObject.name);
         }
-
-        if (!travelling)
+        else
         {
-            SetDestination();
+            if (_currentWaypoint == null) //setting initial waypoint
+            {
+                GameObject[] allWaypoints = GameObject.FindGameObjectsWithTag("Waypoint");
+
+                while (_currentWaypoint == null)
+                {
+                    int random = UnityEngine.Random.Range(0, allWaypoints.Length);
+                    ConnectedWaypoint initialWaypoint = allWaypoints[random].GetComponent<ConnectedWaypoint>();
+                    _currentWaypoint = initialWaypoint;
+                }
+            }
+            if (!travelling)
+            {
+                SetDestination();
+            }
         }
-        
     }
 
     public void SetDestination()
     {
-        
         if (waypointsVisited > 0)
         {
             if (_previousWaypoint == null)
@@ -246,13 +234,13 @@ public class AIPathfinding : MonoBehaviour {
                     triggerDict[s] = true;
                     path = new NavMeshPath();
                     agent.CalculatePath(placeToCheck.transform.position, path);
-                    CheckPath(path);
+                    checkPath(path);
                 }
             }
         }
     }
 
-    void CheckPath(NavMeshPath thisPath)
+    void checkPath(NavMeshPath thisPath)
     {
         pathLength = thisPath.corners.Length;
         //Trigger Investigate state for closest guard AI- look at other guards to see if anyone is closer
