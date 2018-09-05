@@ -22,12 +22,14 @@ public class GameDirector : MonoBehaviour {
     public int numberOfTests;
     public float totalTestTime;
     public bool startSuspicious;
-    public float totalChaseTime;
     public GameObject[] sectorList;
     public List<GameObject> _sectors;
     public bool enterNormal;
     public bool paused;
     public List<GameObject> randomInitialList;
+    public GameObject chasingGuard;
+    public bool resetChaseTimer;
+    public float chaseTimer;
 
 
 
@@ -66,9 +68,11 @@ public class GameDirector : MonoBehaviour {
             }
             
         }
+
+        resetChaseTimer = false;
+        chaseTimer = 0;
          
         //for testing
-        totalChaseTime = 5;
         totalTestTime = 0;
         numberOfTests = 1;
         testFinished = false;
@@ -122,18 +126,21 @@ public class GameDirector : MonoBehaviour {
             int i = 0;
 
             initialDict = new Dictionary<GameObject, ConnectedWaypoint>();
-            while (i < guardList.Length)
+            if (guardList != null && _sectors != null)
             {
-             
-                randomInitialList = new List<GameObject>();
-                randomInitialList = _sectors[i].GetComponent<SectorScript>().wpsInSector;
-                //add patrolling sectors 1 per guard i.e. give them an initial waypoint in each sector as waypoints are connected by sector and they start new patrol route
-                int random = UnityEngine.Random.Range(0, _sectors.Count);
-                initialDict.Add(guardList[i], randomInitialList[random].GetComponent<ConnectedWaypoint>());
-                i++;
-                
+                while (i < guardList.Length)
+                {
+
+                    randomInitialList = new List<GameObject>();
+                    randomInitialList = _sectors[i].GetComponent<SectorScript>().wpsInSector;
+                    //add patrolling sectors 1 per guard i.e. give them an initial waypoint in each sector as waypoints are connected by sector and they start new patrol route
+                    int random = UnityEngine.Random.Range(0, _sectors.Count);
+                    initialDict.Add(guardList[i], randomInitialList[random].GetComponent<ConnectedWaypoint>());
+                    i++;
+
+                }
+                paused = false;
             }
-            paused = false;
         }
         
     }
@@ -142,31 +149,13 @@ public class GameDirector : MonoBehaviour {
         if (enterNormal == true)
         {
             GetInitial();
-
+            chaseTimer = 0;
+            resetChaseTimer = false;
             enterNormal = false;
         }
-        
-            foreach(GameObject guard in guardList)
-        {
-            AIPathfinding.State currentState = guard.GetComponent<AIPathfinding>().state;
-            if (currentState == AIPathfinding.State.CHASE)
-            {
-                startSuspicious = true;
-                state = State.SUSPICIOUS;
-            }
-            else if (currentState == AIPathfinding.State.INVESTIGATE)
-            {
-                return;
-            }
-            
-
-            
         }
        
-        
-    }
-
-    private void Suspicious()
+    public void Suspicious()
     {
         while (startSuspicious == true) // enter state code
         {
@@ -186,21 +175,63 @@ public class GameDirector : MonoBehaviour {
             //if chasing move to a waypoint at random from sector
             //if chase time == chaseTotalTime then move guards back to patrol state and move back to normal director state
 
+            chasingGuard.GetComponent<AIPathfinding>().CheckMySector();
+            string currentSector = chasingGuard.GetComponent<AIPathfinding>().sectorName;
 
 
             startSuspicious = false;
         }
     }
-
+    
     private void Win()
     {
         throw new NotImplementedException();
     }
 
+
+
     // Update is called once per frame
     public void Update()
 
-    {
+    {   ///////////// Handling change from Suspicious to Normal
+        foreach(GameObject guard in guardList)
+        {
+            if (guard.GetComponent<AIPathfinding>().SpotPlayer())
+            {
+                resetChaseTimer = true;
+            }
+        }
+
+        if(state == State.SUSPICIOUS && resetChaseTimer == true)
+        {
+            chaseTimer = 0;
+            resetChaseTimer = false;
+        }
+
+        if(state == State.SUSPICIOUS && resetChaseTimer == false)
+        {
+            chaseTimer += Time.deltaTime * 1;
+        }
+
+        if(chaseTimer >= 5)
+        {
+            state = State.NORMAL;
+            foreach(GameObject guard in guardList)
+            {
+                guard.GetComponent<AIPathfinding>().state = AIPathfinding.State.PATROL;
+            }
+        }
+        //////////////
+
+
+        foreach(GameObject guard in guardList)
+        {
+            if(guard.GetComponent<AIPathfinding>().state == AIPathfinding.State.CHASE)
+            {
+                state = State.SUSPICIOUS;
+            }
+        }
+
         checkTimer += Time.deltaTime * 1;
         //locDict updates
         if (locDict != null)
