@@ -226,12 +226,6 @@ public class AIPathfinding : MonoBehaviour {
             waypointsVisited++;
         }
 
-        //if(GameDirector.State == GameDirector.State.NORMAL
-
-        if (SpotPlayer())
-        {
-            this.state = State.CHASE;
-        }
         
         else
         {
@@ -281,7 +275,7 @@ public class AIPathfinding : MonoBehaviour {
         }
     }
 
-    public bool SpotPlayer()
+    bool SpotPlayer()
     {
         if (Vector3.Distance(transform.position, player.position) < viewDistance)
         {
